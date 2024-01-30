@@ -2,6 +2,7 @@ const {Router} = require("express")
 const User = require("../models/user")
 const router = Router()
 const { createHmac } = require('crypto');
+const {createTokenForUser} = require("../services/auth")
 
 
 
@@ -31,11 +32,13 @@ router.post("/signin",async (req,res) => {
     const hashedPassword = createHmac('sha256',user.salt)
     .update(password)
     .digest("hex") 
+    
 
     if(!hashedPassword === user.password) return res.status(400).json({ error: "Wrong Password" });
+    const token = createTokenForUser(user)
 
-    console.log(hashedPassword)
-    res.json({...user._doc,password:undefined,salt:undefined})
+    console.log(token)
+   return  res.cookie('token',token).json({...user._doc,password:undefined,salt:undefined})
     
    
 }) 

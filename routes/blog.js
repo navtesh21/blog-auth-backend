@@ -27,6 +27,12 @@ router.post("/add-new",async(req,res) => {
   return res.redirect(`blogs/${blog._id}`)
 })
 
+router.delete("/:id",async (req,res) => {
+  const id = req.params.id
+  const blogId = await Blog.findByIdAndDelete(id)
+  return res.json({message:'Blog Deleted'})
+})
+
 
 
 module.exports = router
