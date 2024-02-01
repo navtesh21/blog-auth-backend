@@ -33,6 +33,20 @@ router.delete("/:id",async (req,res) => {
   return res.json({message:'Blog Deleted'})
 })
 
+router.patch("/:id",async (req,res) => {
+  const id = req.params.id
+  const update = req.body
+  try{
+    const blogId = await Blog.updateOne(
+      { _id: id },
+      { $set: update })
+    return res.status(200).json(blogId.acknowledged)
+  }catch(error){
+    return res.status(500).json({message:error})
+  }
+
+})
+
 
 
 module.exports = router
